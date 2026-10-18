@@ -1,0 +1,15 @@
+package com.idonagel.financialadvisor.service;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RiskCalculatorTest {
+    @Test
+    void returnsWeightedAverageForMixedScores() {
+        RiskCalculator calculator = new RiskCalculator();
+        int[] scores = {3,1,3,3,3};
+        double riskScore = calculator.calculateRiskScore(scores);
+        assertEquals(2.5,riskScore,0.0001);
+    }
+}
