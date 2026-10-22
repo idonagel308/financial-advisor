@@ -1,7 +1,7 @@
 package com.idonagel.financialadvisor.service;
 
 public class SavingsScorer {
-    private static final double HIGH_SAVINGS_THRESHOLD = 0.10;
+    private static final double HIGH_SAVINGS_THRESHOLD = 0.10;// Savings rate above this is considered high (score 3)
 
     public int calculateSavingsScore(double monthlyIncome, double monthlyExpenses) {
         if (monthlyIncome < 0) {
