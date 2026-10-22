@@ -30,4 +30,27 @@ class PortfolioAllocatorTest {
         assertEquals(65, stocks, 0.0001);
     }
 
+    // bad input tests
+    @Test
+    void rejectsToleranceBelowRange() {
+        PortfolioAllocator allocator = new PortfolioAllocator();
+        assertThrows(IllegalArgumentException.class, () -> allocator.calculateStockPercentage(2.0,0));
+    }
+    @Test
+    void rejectsToleranceAboveRange() {
+        PortfolioAllocator allocator = new PortfolioAllocator();
+        assertThrows(IllegalArgumentException.class, () -> allocator.calculateStockPercentage(2.0,4));
+    }
+    @Test
+    void rejectsRiskScoreAboveRange() {
+        PortfolioAllocator allocator = new PortfolioAllocator();
+        assertThrows(IllegalArgumentException.class, () -> allocator.calculateStockPercentage(5.0,3));
+    }
+    @Test
+    void rejectsRiskScoreBelowRange() {
+        PortfolioAllocator allocator = new PortfolioAllocator();
+        assertThrows(IllegalArgumentException.class, () -> allocator.calculateStockPercentage(0.0,3));
+    }
+
+
 }
