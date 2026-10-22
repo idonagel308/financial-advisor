@@ -53,4 +53,31 @@ class PortfolioAllocatorTest {
     }
 
 
+    // expected return tests
+    @Test
+    void returnForBalancedPortfolio(){
+        PortfolioAllocator allocator = new PortfolioAllocator();
+        double annualReturn = allocator.calculateExpectedReturn(50);
+        assertEquals(0.065,annualReturn,0.0000001);
+    }
+    @Test
+    void returnForDocExample(){
+        PortfolioAllocator allocator = new PortfolioAllocator();
+        double annualReturn = allocator.calculateExpectedReturn(59);
+        assertEquals(0.0713,annualReturn,0.0000001);
+    }
+    @Test
+    void returnForMostConservativePortfolio(){
+        PortfolioAllocator allocator = new PortfolioAllocator();
+        double annualReturn = allocator.calculateExpectedReturn(20);
+        assertEquals(0.044,annualReturn,0.0000001);
+    }
+    @Test
+    void returnForMostAggressivePortfolio(){
+        PortfolioAllocator allocator = new PortfolioAllocator();
+        double annualReturn = allocator.calculateExpectedReturn(80);
+        assertEquals(0.086,annualReturn,0.0000001);
+    }
+
+
 }
