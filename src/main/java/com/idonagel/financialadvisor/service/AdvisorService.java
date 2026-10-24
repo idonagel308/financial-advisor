@@ -13,7 +13,7 @@ import java.util.List;
  * into a portfolio and a projection, by calling the four calculators in order.
  * <p>
  * It calculates nothing itself. Its helpers are passed in through the
- * constructor (dependency injection), so Spring can provide them later.
+ * constructor (dependency injection); Spring creates them and passes them in when the app starts.
  */
 @Service
 public class AdvisorService {
