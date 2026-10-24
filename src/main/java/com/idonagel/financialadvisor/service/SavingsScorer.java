@@ -1,4 +1,7 @@
 package com.idonagel.financialadvisor.service;
+
+import org.springframework.stereotype.Service;
+
 /**
  * Turns monthly income and expenses into a savings score from 1 to 3,
  * the fifth input of the risk score.
@@ -9,6 +12,7 @@ package com.idonagel.financialadvisor.service;
  * (for example a student): the app still shows them what their
  * current money can grow to.
  */
+@Service
 public class SavingsScorer {
     /**
      * Savings rate above which the score is 3, as a decimal (0.10 = 10%).

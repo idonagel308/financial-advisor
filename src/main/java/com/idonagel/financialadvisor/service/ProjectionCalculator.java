@@ -1,6 +1,7 @@
 package com.idonagel.financialadvisor.service;
 
 import com.idonagel.financialadvisor.model.YearlyValue;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * exactly the yearly return after 12 months, so the projection stays
  * faithful to the historical data.
  */
+@Service
 public class ProjectionCalculator {
     /**
      * Projects the account for the given number of years.

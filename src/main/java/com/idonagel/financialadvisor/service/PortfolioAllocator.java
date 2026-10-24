@@ -1,5 +1,7 @@
 package com.idonagel.financialadvisor.service;
 
+import org.springframework.stereotype.Service;
+
 /**
  * Turns a risk score into a recommended share of stocks.
  * The rest of the portfolio goes to a money-market fund.
@@ -10,6 +12,7 @@ package com.idonagel.financialadvisor.service;
  * result: people who would sell in a panic get fewer stocks, whatever their
  * other answers.
  */
+@Service
 public class PortfolioAllocator {
     /**
      * Expected yearly return of stocks, as a decimal (0.10 = 10%).

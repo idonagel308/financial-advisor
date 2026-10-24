@@ -3,6 +3,7 @@ package com.idonagel.financialadvisor.service;
 import com.idonagel.financialadvisor.model.AdvisorRequest;
 import com.idonagel.financialadvisor.model.Recommendation;
 import com.idonagel.financialadvisor.model.YearlyValue;
+import org.springframework.stereotype.Service;
 
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  * It calculates nothing itself. Its helpers are passed in through the
  * constructor (dependency injection), so Spring can provide them later.
  */
+@Service
 public class AdvisorService {
 
     private final RiskCalculator riskCalculator;
