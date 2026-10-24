@@ -1,4 +1,7 @@
 package com.idonagel.financialadvisor.service;
+
+import org.springframework.stereotype.Service;
+
 /**
  * Combines the questionnaire answers into one risk score.
  * <p>
@@ -7,6 +10,7 @@ package com.idonagel.financialadvisor.service;
  * so it is also between 1 and 3. Time horizon has the highest weight,
  * because it is the most important factor.
  */
+@Service
 public class RiskCalculator {
     /**
      * Weight of each score in the average, in this order: time horizon,
