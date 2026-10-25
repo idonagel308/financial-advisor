@@ -19,20 +19,22 @@ import java.util.List;
  */
 @Service
 public class ProjectionCalculator {
+    /** Longest projection allowed, in years. Also protects the server from huge loops. */
+    private static final int MAX_YEARS = 60;
     /**
      * Projects the account for the given number of years.
      *
      * @param initialEquity money already invested at the start, in shekels, 0 or more
      * @param monthlySavings shekels added each month; a negative value is a withdrawal
      * @param annualReturn yearly return as a decimal (0.065 means 6.5%)
-     * @param years how many years to project, 1 or more
+     * @param years how many years to project, from 1 to MAX_YEARS (60)
      * @return one YearlyValue per year, starting at year 1,
      *         with the state of the account at the end of that year
-     * @throws IllegalArgumentException if years is less than 1 or initialEquity is negative
+     * @throws IllegalArgumentException if years is not between 1 and MAX_YEARS, or initialEquity is negative
      */
     public List<YearlyValue> project(double initialEquity, double monthlySavings, double annualReturn, int years) {
-        if (years < 1) {
-            throw new IllegalArgumentException("Years must be at least 1 but was " + years);
+        if (years < 1 || years > MAX_YEARS) {
+            throw new IllegalArgumentException("Years must be between 1 and "+MAX_YEARS+" but was " + years);
         }
         if (initialEquity < 0) {
             throw new IllegalArgumentException("Initial equity cannot be negative but was " + initialEquity);

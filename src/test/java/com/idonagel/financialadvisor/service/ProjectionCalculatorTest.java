@@ -70,6 +70,17 @@ class ProjectionCalculatorTest {
         assertThrows(IllegalArgumentException.class, () -> calculator.project(10000,1000,0.065,0));
     }
     @Test
+    void rejectsMoreThanSixtyYears(){
+        ProjectionCalculator calculator = new ProjectionCalculator();
+        assertThrows(IllegalArgumentException.class, () -> calculator.project(10000,1000,0.065,61));
+    }
+    @Test
+    void allowsExactlySixtyYears() {
+        ProjectionCalculator calculator = new ProjectionCalculator();
+        List<YearlyValue> result = calculator.project(10000,0, 0.0, 60);
+        assertEquals(60, result.size());
+    }
+    @Test
     void rejectsNegativeEquity(){
         ProjectionCalculator calculator = new ProjectionCalculator();
         assertThrows(IllegalArgumentException.class, () -> calculator.project(-5000,1000,0.065,10));
