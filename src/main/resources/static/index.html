@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Advisor</title>
+    <style>
+        :root {
+            --bg: #f6f7f9;
+            --card: #ffffff;
+            --text: #1c2430;
+            --muted: #5f6b7a;
+            --border: #dde2e8;
+            --accent: #1f6feb;
+            --stocks: #1f6feb;
+            --mmf: #2da44e;
+            --deposited: #9aa5b1;
+            --error-bg: #fdecec;
+            --error-text: #a4161a;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f141a;
+                --card: #171d25;
+                --text: #e6eaef;
+                --muted: #9aa5b1;
+                --border: #2a323d;
+                --accent: #4c8dff;
+                --stocks: #4c8dff;
+                --mmf: #3fb950;
+                --deposited: #5f6b7a;
+                --error-bg: #3a1618;
+                --error-text: #ff8a8a;
+            }
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.5;
+        }
+        main { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+        h1 { margin: 0 0 4px; font-size: 1.8rem; }
+        .subtitle { margin: 0 0 20px; color: var(--muted); }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .card h2 { margin: 0 0 12px; font-size: 1.15rem; }
+        fieldset { border: none; margin: 0 0 16px; padding: 0; }
+        legend { font-weight: 600; margin-bottom: 6px; padding: 0; }
+        .option { display: flex; gap: 8px; align-items: flex-start; margin: 4px 0; cursor: pointer; }
+        .option input { margin-top: 5px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }
+        label.field { display: flex; flex-direction: column; font-weight: 600; gap: 4px; }
+        label.field small { font-weight: 400; color: var(--muted); }
+        input[type="number"] {
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1rem;
+        }
+        button {
+            margin-top: 16px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:disabled { opacity: 0.6; cursor: wait; }
+        .error {
+            background: var(--error-bg);
+            color: var(--error-text);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+        .hidden { display: none; }
+        .numbers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        @media (max-width: 520px) { .numbers { grid-template-columns: 1fr; } }
+        .number { border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+        .number .label { color: var(--muted); font-size: 0.85rem; }
+        .number .value { font-size: 1.3rem; font-weight: 700; }
+        .split-bar { display: flex; height: 28px; border-radius: 6px; overflow: hidden; margin: 8px 0; }
+        .split-bar div { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.85rem; font-weight: 600; }
+        .legend { display: flex; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: 0.9rem; }
+        .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+        svg { width: 100%; height: auto; display: block; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        th, td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--border); }
+        th:first-child, td:first-child { text-align: left; }
+        .table-wrap { max-height: 320px; overflow-y: auto; }
+        .disclaimer { color: var(--muted); font-size: 0.9rem; }
+        .disclaimer ul { margin: 6px 0 0; padding-left: 20px; }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Financial Advisor</h1>
+    <p class="subtitle">See what time and compound interest can do for your money.</p>
+
+    <form id="advisor-form" class="card">
+        <h2>About you</h2>
+
+        <fieldset>
+            <legend>1. When will you need most of the money you invest?</legend>
+            <label class="option"><input type="radio" name="timeHorizon" value="1" required> In less than 2 years</label>
+            <label class="option"><input type="radio" name="timeHorizon" value="2"> In 2 to 6 years</label>
+            <label class="option"><input type="radio" name="timeHorizon" value="3"> In more than 6 years</label>
+        </fieldset>
+
+        <fieldset>
+            <legend>2. You invested ₪10,000, and a month later it's worth ₪7,000. What do you do?</legend>
+            <label class="option"><input type="radio" name="riskTolerance" value="1" required> Sell everything, or most of it</label>
+            <label class="option"><input type="radio" name="riskTolerance" value="2"> Sell some, because it keeps me up at night</label>
+            <label class="option"><input type="radio" name="riskTolerance" value="3"> Don't touch it, or even buy more</label>
+        </fieldset>
+
+        <fieldset>
+            <legend>3. Do you expect a big expense that you'll need part of this money for (for example a wedding or an apartment)?</legend>
+            <label class="option"><input type="radio" name="upcomingExpenses" value="1" required> Yes, within the next year</label>
+            <label class="option"><input type="radio" name="upcomingExpenses" value="2"> Yes, in 1 to 3 years</label>
+            <label class="option"><input type="radio" name="upcomingExpenses" value="3"> No such expense in the next 3 years</label>
+        </fieldset>
+
+        <fieldset>
+            <legend>4. If you were left without income for a few months, could someone help you financially?</legend>
+            <label class="option"><input type="radio" name="familySupport" value="1" required> No</label>
+            <label class="option"><input type="radio" name="familySupport" value="2"> Yes, with small amounts or for a short time</label>
+            <label class="option"><input type="radio" name="familySupport" value="3"> Yes, with significant help for several months</label>
+        </fieldset>
+
+        <h2>Your money</h2>
+        <div class="grid">
+            <label class="field">Monthly income (₪)
+                <input type="number" name="monthlyIncome" value="8000" step="1" required>
+            </label>
+            <label class="field">Monthly expenses (₪)
+                <input type="number" name="monthlyExpenses" value="7000" step="1" required>
+            </label>
+            <label class="field">Money you already have (₪)
+                <input type="number" name="currentEquity" value="10000" step="1" required>
+            </label>
+            <label class="field">Years to project
+                <input type="number" name="years" value="30" step="1" required>
+                <small>From 1 to 60</small>
+            </label>
+        </div>
+
+        <button type="submit" id="submit-button">Show my plan</button>
+    </form>
+
+    <div id="error" class="error hidden" role="alert"></div>
+
+    <section id="results" class="hidden">
+        <div class="card">
+            <h2>Your recommended split</h2>
+            <div class="split-bar">
+                <div id="stocks-bar" style="background: var(--stocks)"></div>
+                <div id="mmf-bar" style="background: var(--mmf)"></div>
+            </div>
+            <div class="legend">
+                <span><span class="dot" style="background: var(--stocks)"></span>Stocks</span>
+                <span><span class="dot" style="background: var(--mmf)"></span>Money-market fund</span>
+            </div>
+            <p id="split-text" class="disclaimer"></p>
+        </div>
+
+        <div class="card">
+            <h2>After <span id="years-text"></span> years</h2>
+            <div class="numbers">
+                <div class="number"><div class="label">Final balance</div><div class="value" id="final-balance"></div></div>
+                <div class="number"><div class="label">You deposited</div><div class="value" id="total-deposited"></div></div>
+                <div class="number"><div class="label">Profit from growth</div><div class="value" id="profit"></div></div>
+            </div>
+            <p id="runs-out" class="error hidden"></p>
+        </div>
+
+        <div class="card">
+            <h2>How it grows</h2>
+            <div id="chart"></div>
+            <div class="legend">
+                <span><span class="dot" style="background: var(--accent)"></span>Balance</span>
+                <span><span class="dot" style="background: var(--deposited)"></span>Money you put in</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Year by year</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Year</th><th>Deposited</th><th>Balance</th></tr></thead>
+                    <tbody id="year-table"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <div class="card disclaimer">
+        <strong>Educational tool, not investment advice.</strong>
+        <ul>
+            <li>Stocks are assumed to return 10% a year (S&amp;P 500 history, 1928–2025) and the money-market fund 3% a year.</li>
+            <li>The S&amp;P 500 is measured in dollars; currency risk is not included.</li>
+            <li>Money-market returns change with the Bank of Israel interest rate.</li>
+            <li>Past returns do not guarantee future returns.</li>
+        </ul>
+    </div>
+</main>
+
+<script>
+    // ---------------------------------------------------------------
+    // This page does NO calculations. It sends the answers to the
+    // Java backend (POST /api/recommendation) and only displays the
+    // answer. All the logic lives in the Spring Boot app.
+    // ---------------------------------------------------------------
+
+    const form = document.getElementById("advisor-form");
+    const submitButton = document.getElementById("submit-button");
+    const errorBox = document.getElementById("error");
+    const results = document.getElementById("results");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault(); // stop the browser from reloading the page
+
+        // 1. Collect the form into the same JSON you sent in Postman
+        const data = new FormData(form);
+        const request = {
+            timeHorizon: Number(data.get("timeHorizon")),
+            riskTolerance: Number(data.get("riskTolerance")),
+            upcomingExpenses: Number(data.get("upcomingExpenses")),
+            familySupport: Number(data.get("familySupport")),
+            monthlyIncome: Number(data.get("monthlyIncome")),
+            monthlyExpenses: Number(data.get("monthlyExpenses")),
+            currentEquity: Number(data.get("currentEquity")),
+            years: Number(data.get("years"))
+        };
+
+        hideError();
+        submitButton.disabled = true;
+
+        try {
+            // 2. Send it to the backend: the same POST Postman sent
+            const response = await fetch("/api/recommendation", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(request)
+            });
+
+            // 3. Read the JSON answer
+            const body = await response.json();
+
+            // 4. A 400 comes back as {"error": "..."}: show that message
+            if (!response.ok) {
+                showError(body.error || "Something went wrong.");
+                return;
+            }
+
+            showResults(body, request.years);
+        } catch (e) {
+            showError("Couldn't reach the server. Is the app running?");
+        } finally {
+            submitButton.disabled = false;
+        }
+    });
+
+    // Formatting for display only: the numbers themselves come from the backend
+    function shekels(amount) {
+        return "₪" + Math.round(amount).toLocaleString("en-US");
+    }
+
+    function showError(message) {
+        errorBox.textContent = message; // textContent, so the message is shown as text, never run as HTML
+        errorBox.classList.remove("hidden");
+        results.classList.add("hidden");
+    }
+
+    function hideError() {
+        errorBox.classList.add("hidden");
+    }
+
+    function showResults(rec, years) {
+        const stocks = Math.round(rec.stockPercentage);
+        const mmf = Math.round(rec.moneyMarketPercentage);
+
+        const stocksBar = document.getElementById("stocks-bar");
+        const mmfBar = document.getElementById("mmf-bar");
+        stocksBar.style.width = stocks + "%";
+        stocksBar.textContent = stocks > 8 ? stocks + "%" : "";
+        mmfBar.style.width = mmf + "%";
+        mmfBar.textContent = mmf > 8 ? mmf + "%" : "";
+
+        document.getElementById("split-text").textContent =
+            "Risk score " + rec.riskScore.toFixed(2) + " out of 3 · expected yearly return " +
+            (rec.annualReturn * 100).toFixed(1) + "%";
+
+        document.getElementById("years-text").textContent = years;
+        document.getElementById("final-balance").textContent = shekels(rec.finalBalance);
+        document.getElementById("total-deposited").textContent = shekels(rec.totalDeposited);
+        document.getElementById("profit").textContent = shekels(rec.profit);
+
+        const runsOut = document.getElementById("runs-out");
+        if (rec.yearMoneyRunsOut > 0) {
+            runsOut.textContent = "Your expenses are higher than your income: the money runs out in year " + rec.yearMoneyRunsOut + ".";
+            runsOut.classList.remove("hidden");
+        } else {
+            runsOut.classList.add("hidden");
+        }
+
+        const tbody = document.getElementById("year-table");
+        tbody.innerHTML = "";
+        for (const row of rec.projection) {
+            const tr = document.createElement("tr");
+            for (const value of [row.year, shekels(row.totalDeposited), shekels(row.balance)]) {
+                const td = document.createElement("td");
+                td.textContent = value;
+                tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+        }
+
+        drawChart(rec.projection);
+        results.classList.remove("hidden");
+        results.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // A simple line chart: balance vs. money put in, year by year
+    function drawChart(projection) {
+        const width = 700, height = 260, pad = 40;
+        const maxValue = Math.max(1, ...projection.map(p => Math.max(p.balance, p.totalDeposited)));
+        const x = i => pad + (i / Math.max(1, projection.length - 1)) * (width - 2 * pad);
+        const y = v => height - pad - (v / maxValue) * (height - 2 * pad);
+        const line = key => projection.map((p, i) => (i === 0 ? "M" : "L") + x(i).toFixed(1) + "," + y(p[key]).toFixed(1)).join(" ");
+
+        document.getElementById("chart").innerHTML =
+            '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Balance and deposits by year">' +
+            '<line x1="' + pad + '" y1="' + (height - pad) + '" x2="' + (width - pad) + '" y2="' + (height - pad) + '" stroke="var(--border)"/>' +
+            '<path d="' + line("totalDeposited") + '" fill="none" stroke="var(--deposited)" stroke-width="2.5" stroke-dasharray="6 4"/>' +
+            '<path d="' + line("balance") + '" fill="none" stroke="var(--accent)" stroke-width="3"/>' +
+            '<text x="' + pad + '" y="' + (height - pad + 20) + '" fill="var(--muted)" font-size="13">Year 1</text>' +
+            '<text x="' + (width - pad) + '" y="' + (height - pad + 20) + '" fill="var(--muted)" font-size="13" text-anchor="end">Year ' + projection.length + '</text>' +
+            '<text x="' + pad + '" y="' + (pad - 12) + '" fill="var(--muted)" font-size="13">' + shekels(maxValue) + '</text>' +
+            '</svg>';
+    }
+</script>
+</body>
+</html>

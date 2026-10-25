@@ -114,7 +114,9 @@ Requirements: **Java 24** and **Maven**.
 mvn spring-boot:run
 ```
 
-Or open the project in IntelliJ and run `FinancialAdvisorApplication`. The API starts on `http://localhost:8080`.
+Or open the project in IntelliJ and run `FinancialAdvisorApplication`.
+
+Then open **`http://localhost:8080/`** for the demo page: answer the questions and see your split, a growth chart and a year-by-year table. The page does no calculations; it sends your answers to `POST /api/recommendation` with `fetch` and only displays the answer.
 
 ## Tests
 
@@ -130,11 +132,10 @@ Java 24 · Spring Boot 4 · Maven · JUnit 6 · MockMvc · Postman
 
 ## How it was built
 
-My first end-to-end solo project. I wrote every line of the Java code myself, step by step, with Claude (AI) as a tutor and code reviewer. Every feature went through a GitHub Issue → branch → Pull Request → review → merge.
+My first end-to-end solo project. I wrote every line of the Java code myself, step by step, with Claude (AI) as a tutor and code reviewer. The demo page (`src/main/resources/static/index.html`) was built with AI assistance; I reviewed it, and all logic stays in the Java backend. Every feature went through a GitHub Issue → branch → Pull Request → review → merge.
 
 ## Roadmap
 
-- Exact money calculations with `BigDecimal`
-- A simple web page for trying the app
+- Exact money calculations with `BigDecimal`, and profit for every year in the projection
 - Inflation-adjusted returns and a range of possible outcomes instead of one number
 - Saving and comparing scenarios (e.g. "30 years at 50/50" vs "30 years at 80/20")
