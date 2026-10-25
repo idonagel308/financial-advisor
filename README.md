@@ -138,4 +138,4 @@ My first end-to-end solo project. I wrote every line of the Java code myself, st
 
 - Exact money calculations with `BigDecimal`, and profit for every year in the projection
 - Inflation-adjusted returns and a range of possible outcomes instead of one number
-- Saving and comparing scenarios (e.g. "30 years at 50/50" vs "30 years at 80/20")mon
+- Saving and comparing scenarios (e.g. "30 years at 50/50" vs "30 years at 80/20")
