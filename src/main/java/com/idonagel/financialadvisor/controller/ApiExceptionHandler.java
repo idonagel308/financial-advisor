@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
+import java.util.Objects;
+
 /**
  * Turns client mistakes into a clear 400 response, from any controller.
  * <p>
@@ -24,7 +26,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleInvalidInput(IllegalArgumentException exception) {
-        return Map.of("error", exception.getMessage());
+        return Map.of("error", Objects.requireNonNullElse(exception.getMessage(), "Invalid input"));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
