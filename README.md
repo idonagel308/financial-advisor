@@ -6,8 +6,7 @@ An educational web API that shows young people how much **time and compound inte
 
 ## Why I built this
 
-<!-- Ido: replace this paragraph with 2–3 sentences in your own words. -->
-Many young people know they "should invest", but don't feel how big the difference is between starting at 23 and starting at 33. This app makes that difference concrete: answer four questions, enter your income and expenses, and see your money grow year by year.
+I built this because finance is more than numbers. It's also a lot of psychology. If you show people how their money can work for them, at a level of risk they can actually live with, you can change the way they think about their future.
 
 ## What it does
 
@@ -131,7 +130,7 @@ Java 24 · Spring Boot 4 · Maven · JUnit 6 · MockMvc · Postman
 
 ## How it was built
 
-My first end-to-end solo project. I wrote the code step by step, with Claude (AI) as a tutor and code reviewer. Every feature went through a GitHub Issue → branch → Pull Request → review → merge.
+My first end-to-end solo project. I wrote every line of the Java code myself, step by step, with Claude (AI) as a tutor and code reviewer. Every feature went through a GitHub Issue → branch → Pull Request → review → merge.
 
 ## Roadmap
 
