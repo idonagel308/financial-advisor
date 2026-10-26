@@ -202,7 +202,7 @@
             <h2>Year by year</h2>
             <div class="table-wrap">
                 <table>
-                    <thead><tr><th>Year</th><th>Deposited</th><th>Balance</th></tr></thead>
+                    <thead><tr><th>Year</th><th>Deposited</th><th>Balance</th><th>Profit</th></tr></thead>
                     <tbody id="year-table"></tbody>
                 </table>
             </div>
@@ -323,7 +323,7 @@
         tbody.innerHTML = "";
         for (const row of rec.projection) {
             const tr = document.createElement("tr");
-            for (const value of [row.year, shekels(row.totalDeposited), shekels(row.balance)]) {
+            for (const value of [row.year, shekels(row.totalDeposited), shekels(row.balance), shekels(row.profit)]) {
                 const td = document.createElement("td");
                 td.textContent = value;
                 tr.appendChild(td);

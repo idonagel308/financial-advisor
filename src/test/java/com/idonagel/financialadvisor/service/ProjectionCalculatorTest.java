@@ -17,11 +17,11 @@ class ProjectionCalculatorTest {
 
         YearlyValue firstYear = result.getFirst();
         assertEquals(1, firstYear.year());                       // years start at 1, not 0
-        assertEquals(17000, firstYear.balance(), 0.01);          // 12 deposits added in year 1
-        assertEquals(17000, firstYear.totalDeposited(), 0.01);   // deposits tracked correctly
+        assertEquals(17000, firstYear.balance().doubleValue(), 0.01);          // 12 deposits added in year 1
+        assertEquals(17000, firstYear.totalDeposited().doubleValue(), 0.01);   // deposits tracked correctly
 
         YearlyValue secondYear = result.get(1);
-        assertEquals(29000, secondYear.balance(), 0.01);         // balance carries over into year 2
+        assertEquals(29000, secondYear.balance().doubleValue(), 0.01);         // balance carries over into year 2
     }
 
     @Test
@@ -32,7 +32,7 @@ class ProjectionCalculatorTest {
 
         YearlyValue firstYear = result.getFirst();
         assertEquals(1, firstYear.year());
-        assertEquals(11200, firstYear.balance(), 0.01);
+        assertEquals(11200, firstYear.balance().doubleValue(), 0.01);
     }
     @Test
     void projectsThirtyYearsForExampleUser() {
@@ -43,10 +43,15 @@ class ProjectionCalculatorTest {
         YearlyValue firstYear = result.getFirst();
 
         assertEquals(1, firstYear.year());
-        assertEquals(23003.44, firstYear.balance(), 0.01);
-        assertEquals(185474, result.get(9).balance(), 1);
-        assertEquals(1133170, result.get(29).balance(), 1);
-        assertEquals(370000,result.get(29).totalDeposited(),0.01);
+        assertEquals(23003.44, firstYear.balance().doubleValue(), 0.01);
+        assertEquals(185474, result.get(9).balance().doubleValue(), 1);
+        assertEquals(1133170, result.get(29).balance().doubleValue(), 1);
+        assertEquals(370000,result.get(29).totalDeposited().doubleValue(),0.01);
+
+        // checks for profit method
+        assertEquals(1003.44,firstYear.profit().doubleValue(),0.01);
+        assertEquals(763170,result.get(29).profit().doubleValue(),1);
+
 
     }
 
@@ -58,9 +63,12 @@ class ProjectionCalculatorTest {
 
         assertEquals(2,result.size());
         YearlyValue firstYear = result.getFirst();
-        assertEquals(0, firstYear.balance(),0.01);
-        assertEquals(0, result.get(1).balance());
-        assertEquals(0,firstYear.totalDeposited());
+        assertEquals(0, firstYear.balance().doubleValue(),0.01);
+        assertEquals(0, result.get(1).balance().doubleValue());
+        assertEquals(0,firstYear.totalDeposited().doubleValue());
+
+        // checks for profit method
+        assertEquals(0,firstYear.profit().doubleValue(),0.01);
     }
 
     // invalid input tests

@@ -19,9 +19,9 @@ class AdvisorServiceTest {
         assertEquals(50, result.moneyMarketPercentage(), 0.0001);
         assertEquals(0.065, result.annualReturn(), 0.000001);
         assertEquals(30, result.projection().size());
-        assertEquals(1133170, result.finalBalance(), 1);
-        assertEquals(370000, result.totalDeposited(), 0.01);
-        assertEquals(763170, result.profit(), 1);
+        assertEquals(1133170, result.finalBalance().doubleValue(), 1);
+        assertEquals(370000, result.totalDeposited().doubleValue(), 0.01);
+        assertEquals(763170, result.profit().doubleValue(), 1);
         assertEquals(0, result.yearMoneyRunsOut());
     }
     @Test

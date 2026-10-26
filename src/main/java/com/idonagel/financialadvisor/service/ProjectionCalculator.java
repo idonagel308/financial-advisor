@@ -3,6 +3,8 @@ package com.idonagel.financialadvisor.service;
 import com.idonagel.financialadvisor.model.YearlyValue;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -16,11 +18,19 @@ import java.util.List;
  * The yearly return is converted to a monthly rate that compounds to
  * exactly the yearly return after 12 months, so the projection stays
  * faithful to the historical data.
+ * <p>
+ * Money is kept as {@link java.math.BigDecimal}. Inside the calculation the balance keeps
+ * 10 decimal places, so monthly rounding never adds up; each year's result is rounded to
+ * 2 decimal places (agorot).
  */
 @Service
 public class ProjectionCalculator {
     /** Longest projection allowed, in years. Also protects the server from huge loops. */
     private static final int MAX_YEARS = 60;
+    /** Decimal places kept inside the calculation, so rounding never adds up month after month. */
+    private static final int CALCULATION_SCALE = 10;
+    /** Decimal places of money in the results: agorot. */
+    private static final int MONEY_SCALE = 2;
     /**
      * Projects the account for the given number of years.
      *
@@ -39,26 +49,30 @@ public class ProjectionCalculator {
         if (initialEquity < 0) {
             throw new IllegalArgumentException("Initial equity cannot be negative but was " + initialEquity);
         }
-        double balance = initialEquity;
-        double totalDeposited = initialEquity;
+        BigDecimal balance = BigDecimal.valueOf(initialEquity);
+        BigDecimal totalDeposited = BigDecimal.valueOf(initialEquity);
         List<YearlyValue> result = new ArrayList<>();
         double monthlyRate = Math.pow((1 + annualReturn), 1.0 / 12) - 1;
         double monthlyGrowth = 1 + monthlyRate;
+        BigDecimal growth = BigDecimal.valueOf(monthlyGrowth);
+        BigDecimal savings = BigDecimal.valueOf(monthlySavings);
 
 
         for (int year = 1; year <= years; year++) {
             for (int month = 0; month < 12; month++) {
-                balance = balance * monthlyGrowth + monthlySavings;
-                totalDeposited += monthlySavings;
+                balance = balance.multiply(growth).add(savings).setScale(CALCULATION_SCALE, RoundingMode.HALF_UP);
+                totalDeposited = totalDeposited.add(savings);
                 // the account can't go negative: once it's empty, withdrawals stop
-                if (balance < 0) {
-                    totalDeposited -= balance;
-                    balance = 0;
+                if (balance.compareTo(BigDecimal.ZERO) < 0) {
+                    totalDeposited = totalDeposited.subtract(balance);
+                    balance = BigDecimal.ZERO;
                 }
             }
-            YearlyValue currentYear = new YearlyValue(year, balance, totalDeposited);
+            BigDecimal roundedBalance = balance.setScale(MONEY_SCALE, RoundingMode.HALF_UP);
+            BigDecimal roundedDeposited = totalDeposited.setScale(MONEY_SCALE, RoundingMode.HALF_UP);
+            BigDecimal profit = roundedBalance.subtract(roundedDeposited);
+            YearlyValue currentYear = new YearlyValue(year, roundedBalance, roundedDeposited, profit);
             result.add(currentYear);
-
         }
         return result;
     }
