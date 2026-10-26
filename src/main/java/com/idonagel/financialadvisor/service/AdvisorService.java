@@ -5,7 +5,6 @@ import com.idonagel.financialadvisor.model.Recommendation;
 import com.idonagel.financialadvisor.model.YearlyValue;
 import org.springframework.stereotype.Service;
 
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -58,7 +57,6 @@ public class AdvisorService {
         double monthlySavings = request.monthlyIncome() - request.monthlyExpenses();
         List<YearlyValue> projection = projectionCalculator.project(request.currentEquity(), monthlySavings, annualReturn, request.years());
         YearlyValue lastYear = projection.getLast();
-
 
         // 4. The first year the balance hits 0, or 0 if it never does
         int yearMoneyRunsOut = 0;
