@@ -58,7 +58,7 @@ public class AdvisorService {
         double monthlySavings = request.monthlyIncome() - request.monthlyExpenses();
         List<YearlyValue> projection = projectionCalculator.project(request.currentEquity(), monthlySavings, annualReturn, request.years());
         YearlyValue lastYear = projection.getLast();
-        BigDecimal profit = lastYear.balance().subtract(lastYear.totalDeposited());
+
 
         // 4. The first year the balance hits 0, or 0 if it never does
         int yearMoneyRunsOut = 0;
@@ -70,7 +70,7 @@ public class AdvisorService {
         }
 
         return new Recommendation(riskScore, stockPercentage, moneyMarketPercentage, annualReturn,
-                projection, lastYear.balance(), lastYear.totalDeposited(), profit, yearMoneyRunsOut);
+                projection, lastYear.balance(), lastYear.totalDeposited(), lastYear.profit(), yearMoneyRunsOut);
     }
 
 }

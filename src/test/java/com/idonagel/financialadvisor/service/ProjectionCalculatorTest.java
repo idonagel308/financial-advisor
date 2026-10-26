@@ -48,6 +48,11 @@ class ProjectionCalculatorTest {
         assertEquals(1133170, result.get(29).balance().doubleValue(), 1);
         assertEquals(370000,result.get(29).totalDeposited().doubleValue(),0.01);
 
+        // checks for profit method
+        assertEquals(1003.44,firstYear.profit().doubleValue(),0.01);
+        assertEquals(763170,result.get(29).profit().doubleValue(),1);
+
+
     }
 
     // tests for the case the user as a negative monthly split.
@@ -61,6 +66,9 @@ class ProjectionCalculatorTest {
         assertEquals(0, firstYear.balance().doubleValue(),0.01);
         assertEquals(0, result.get(1).balance().doubleValue());
         assertEquals(0,firstYear.totalDeposited().doubleValue());
+
+        // checks for profit method
+        assertEquals(0,firstYear.profit().doubleValue(),0.01);
     }
 
     // invalid input tests

@@ -7,7 +7,8 @@ import java.math.BigDecimal;
  * @param balance money in the account at the end of the year, in shekels
  * @param totalDeposited all money put in so far (initial equity plus monthly
  *                       savings), minus what was really withdrawn, in shekels.
- *                       Profit = balance - totalDeposited.
+ *                       See profit.
+ *                       @param profit balance minus totalDeposited, in shekels
  */
-public record YearlyValue(int year, BigDecimal balance, BigDecimal totalDeposited) {
+public record YearlyValue(int year, BigDecimal balance, BigDecimal totalDeposited, BigDecimal profit) {
 }

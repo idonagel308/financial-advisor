@@ -68,11 +68,11 @@ public class ProjectionCalculator {
                     balance = BigDecimal.ZERO;
                 }
             }
-            YearlyValue currentYear = new YearlyValue(year,
-                    balance.setScale(MONEY_SCALE, RoundingMode.HALF_UP),
-                    totalDeposited.setScale(MONEY_SCALE, RoundingMode.HALF_UP));
+            BigDecimal roundedBalance = balance.setScale(MONEY_SCALE, RoundingMode.HALF_UP);
+            BigDecimal roundedDeposited = totalDeposited.setScale(MONEY_SCALE, RoundingMode.HALF_UP);
+            BigDecimal profit = roundedBalance.subtract(roundedDeposited);
+            YearlyValue currentYear = new YearlyValue(year, roundedBalance, roundedDeposited, profit);
             result.add(currentYear);
-
         }
         return result;
     }
