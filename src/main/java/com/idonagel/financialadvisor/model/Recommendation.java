@@ -1,5 +1,6 @@
 package com.idonagel.financialadvisor.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 /**
  * The app's full answer for one person: the recommended portfolio
@@ -15,5 +16,5 @@ import java.util.List;
  * @param profit                finalBalance minus totalDeposited
  * @param yearMoneyRunsOut      first year the balance reaches 0, or 0 if it never does
  */
-public record Recommendation(double riskScore, double stockPercentage, double moneyMarketPercentage, double annualReturn, List<YearlyValue> projection, double finalBalance, double totalDeposited, double profit, int yearMoneyRunsOut) {
+public record Recommendation(double riskScore, double stockPercentage, double moneyMarketPercentage, double annualReturn, List<YearlyValue> projection, BigDecimal finalBalance, BigDecimal totalDeposited, BigDecimal profit, int yearMoneyRunsOut) {
 }

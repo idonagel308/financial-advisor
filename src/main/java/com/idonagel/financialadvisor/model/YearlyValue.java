@@ -1,4 +1,5 @@
 package com.idonagel.financialadvisor.model;
+import java.math.BigDecimal;
 /**
  * The state of the account at the end of one year of a projection.
  *
@@ -8,5 +9,5 @@ package com.idonagel.financialadvisor.model;
  *                       savings), minus what was really withdrawn, in shekels.
  *                       Profit = balance - totalDeposited.
  */
-public record YearlyValue(int year, double balance, double totalDeposited) {
+public record YearlyValue(int year, BigDecimal balance, BigDecimal totalDeposited) {
 }

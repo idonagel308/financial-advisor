@@ -6,6 +6,7 @@ import com.idonagel.financialadvisor.model.YearlyValue;
 import org.springframework.stereotype.Service;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -57,12 +58,12 @@ public class AdvisorService {
         double monthlySavings = request.monthlyIncome() - request.monthlyExpenses();
         List<YearlyValue> projection = projectionCalculator.project(request.currentEquity(), monthlySavings, annualReturn, request.years());
         YearlyValue lastYear = projection.getLast();
-        double profit = lastYear.balance() - lastYear.totalDeposited();
+        BigDecimal profit = lastYear.balance().subtract(lastYear.totalDeposited());
 
         // 4. The first year the balance hits 0, or 0 if it never does
         int yearMoneyRunsOut = 0;
         for (YearlyValue row : projection) {
-            if (row.balance() == 0) {
+            if (row.balance().compareTo(BigDecimal.ZERO) == 0) {
                 yearMoneyRunsOut = row.year();
                 break;
             }
