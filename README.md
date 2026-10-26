@@ -13,7 +13,7 @@ I built this because finance is more than numbers. It's also a lot of psychology
 1. Takes four questionnaire answers plus monthly income, expenses, current savings and a time horizon in years.
 2. Calculates a **risk score** from 1 (needs a conservative portfolio) to 3 (can take more risk).
 3. Turns the risk score into a **stocks / money-market split**.
-4. Projects the account **month by month** and returns the balance for every year, the total deposited and the profit.
+4. Projects the account **month by month** and returns, for every year, the balance, the total deposited and the profit so far.
 
 ## The algorithm
 
@@ -58,6 +58,8 @@ Simplifications: the S&P 500 is measured in dollars (no currency risk is modelle
 
 Monthly compounding, using a monthly rate that compounds to exactly the yearly return after 12 months: `(1 + r)^(1/12) − 1`. Each month the balance earns interest, then the monthly savings are added. Negative savings are withdrawals; if the account runs out, it stays at 0 and the response reports the year the money ran out.
 
+Money is calculated with `BigDecimal`, not `double`, so amounts are exact. Inside the calculation the balance keeps 10 decimal places; each year's result is rounded to agorot (2 decimal places). That way a year still compounds to exactly the stated return, and on every row balance − deposited = profit, to the agora.
+
 ## API
 
 ### `POST /api/recommendation`
@@ -77,7 +79,7 @@ Monthly compounding, using a monthly rate that compounds to exactly the yearly r
 }
 ```
 
-**Response** (`200 OK`, projection shortened, values rounded)
+**Response** (`200 OK`, projection shortened)
 
 ```json
 {
@@ -86,12 +88,12 @@ Monthly compounding, using a monthly rate that compounds to exactly the yearly r
   "moneyMarketPercentage": 50,
   "annualReturn": 0.065,
   "projection": [
-    { "year": 1, "balance": 23003.44, "totalDeposited": 22000 },
+    { "year": 1, "balance": 23003.44, "totalDeposited": 22000.00, "profit": 1003.44 },
     "... one entry per year ...",
-    { "year": 30, "balance": 1133169.96, "totalDeposited": 370000 }
+    { "year": 30, "balance": 1133169.96, "totalDeposited": 370000.00, "profit": 763169.96 }
   ],
   "finalBalance": 1133169.96,
-  "totalDeposited": 370000,
+  "totalDeposited": 370000.00,
   "profit": 763169.96,
   "yearMoneyRunsOut": 0
 }
@@ -136,6 +138,6 @@ My first end-to-end solo project. I wrote every line of the Java code myself, st
 
 ## Roadmap
 
-- Exact money calculations with `BigDecimal`, and profit for every year in the projection
+- When expenses are higher than income, report the month the money runs out, not just the year
 - Inflation-adjusted returns and a range of possible outcomes instead of one number
 - Saving and comparing scenarios (e.g. "30 years at 50/50" vs "30 years at 80/20")
