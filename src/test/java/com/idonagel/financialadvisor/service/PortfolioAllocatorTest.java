@@ -12,19 +12,19 @@ class PortfolioAllocatorTest {
         assertEquals(20, stocks, 0.0001);
     }
     @Test
-    void theScoreGetsOverriddenByCap() {
+    void capLimitsStocksForLowTolerance() {
         PortfolioAllocator allocator = new PortfolioAllocator();
         double stocks = allocator.calculateStockPercentage(2.5, 1);
         assertEquals(50, stocks, 0.0001);
     }
     @Test
-    void noCapTheLineIsUsed() {
+    void usesLineWhenBelowCap() {
         PortfolioAllocator allocator = new PortfolioAllocator();
         double stocks = allocator.calculateStockPercentage(2.3, 3);
         assertEquals(59, stocks, 0.0001);
     }
     @Test
-    void theMiddleCapPutToUse() {
+    void capsAtSixtyFiveForMediumTolerance() {
         PortfolioAllocator allocator = new PortfolioAllocator();
         double stocks = allocator.calculateStockPercentage(3.0, 2);
         assertEquals(65, stocks, 0.0001);
@@ -55,25 +55,25 @@ class PortfolioAllocatorTest {
 
     // expected return tests
     @Test
-    void returnForBalancedPortfolio(){
+    void returnsBlendedReturnForBalancedPortfolio(){
         PortfolioAllocator allocator = new PortfolioAllocator();
         double annualReturn = allocator.calculateExpectedReturn(50);
         assertEquals(0.065,annualReturn,0.0000001);
     }
     @Test
-    void returnForDocExample(){
+    void returnsBlendedReturnForUnevenSplit(){
         PortfolioAllocator allocator = new PortfolioAllocator();
         double annualReturn = allocator.calculateExpectedReturn(59);
         assertEquals(0.0713,annualReturn,0.0000001);
     }
     @Test
-    void returnForMostConservativePortfolio(){
+    void returnsLowestReturnForMostConservativePortfolio(){
         PortfolioAllocator allocator = new PortfolioAllocator();
         double annualReturn = allocator.calculateExpectedReturn(20);
         assertEquals(0.044,annualReturn,0.0000001);
     }
     @Test
-    void returnForMostAggressivePortfolio(){
+    void returnsHighestReturnForMostAggressivePortfolio(){
         PortfolioAllocator allocator = new PortfolioAllocator();
         double annualReturn = allocator.calculateExpectedReturn(80);
         assertEquals(0.086,annualReturn,0.0000001);
