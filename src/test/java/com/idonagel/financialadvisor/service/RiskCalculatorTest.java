@@ -42,7 +42,7 @@ class RiskCalculatorTest {
     }
 
     @Test
-    void rejectNullScores() {
+    void rejectsNullScores() {
         RiskCalculator calculator = new RiskCalculator();
         int[] scores = null;
         assertThrows(IllegalArgumentException.class, () -> calculator.calculateRiskScore(scores));
